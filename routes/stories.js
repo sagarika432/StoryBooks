@@ -83,7 +83,9 @@ router.get('/edit/:id' ,ensureAuthenticated , (req,res) => {
     })
     .populate('user')
     .then(story => {
-        if(story.user != req.user.id){
+        if(story.user._id != req.user.id){
+         // console.log(story.user);
+        //  console.log(req.user.id);
           res.redirect('/stories');
         } else {
           res.render('stories/edit', {
