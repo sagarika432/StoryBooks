@@ -7,11 +7,12 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
-
+const cors = require('cors');
 
 //load Models
 require('./models/User');
 require('./models/Story');
+require('./models/Mapping')
 
 //Passport Config
 require('./config/passport')(passport);
@@ -53,7 +54,7 @@ const app = express();
 //body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
+app.use(cors({credentials:true}));
 
 // Method Override Middelware
 app.use(methodOverride('_method'));
@@ -94,7 +95,11 @@ app.use(passport.session());
 
 //Set Global vars
 app.use((req,res,next) => {
+    // console.log(req.user);
     res.locals.user = req.user || null;
+    // if(res.response ) res.locals.tigerUser = res.response.username || null ;
+    // console.log('res.locals.users ' +res.locals.user);
+    // if(res.response) console.log('res.locals.tigerUser' + res.response.username)
     next();
 
 });
