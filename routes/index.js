@@ -7,6 +7,7 @@ const Cookies = require('universal-cookie');
 const unirest = require('unirest');
 const storage = require('node-sessionstorage')
 var sessionstorage = require('sessionstorage')
+const domainName = require('../domainName')
 
 const {ensureAuthenticated , ensureGuest } = require('../helpers/auth');
 
@@ -41,12 +42,12 @@ router.get('/dashboard/:id',(req,res)=>{
      console.log(req.params.id);
      const bodyToSend =JSON.stringify( {
         id: req.params.id,
-        domainName: 'storybook.com'
+        domainName
      });
      console.log(bodyToSend);
     unirest.post('http://192.168.43.124:3000/login/resource').header({
         'Content-Type':'application/json',
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9vay5jb20iLCJjYWxsYmFja1VybCI6ImxvY2FsaG9zdDo1MDAwL2Rhc2hib2FyZCIsImZhY2UiOnRydWUsIm90cCI6dHJ1ZSwidm9pY2UiOnRydWUsInBlcm1pc3Npb25zIjp7Im5hbWUiOmZhbHNlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjpmYWxzZSwiYXVkaW8iOmZhbHNlfX0sImlhdCI6MTU1MTI2NDE5M30.Tu-lHJUs7k7hIj--QvUviNVgboBoYYnqePB-vzFKFBk'
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9va3MuY29tIiwiY2FsbGJhY2tVcmwiOiIxOTIuMTY4LjQzLjgxOjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6ZmFsc2UsInVzZXJuYW1lIjp0cnVlLCJwaG9uZSI6dHJ1ZSwiZG9iIjp0cnVlLCJpbWciOnRydWUsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTEzMjIyOTR9.CUNHvx8pRvu_dYbeMYO0IynrQSz9u4wCG0vTbrzSE7w'
      }).send(bodyToSend).end((response) =>{
          
          console.log('--' + JSON.stringify(response.body.response));
@@ -69,9 +70,9 @@ router.get('/dashboard/:id',(req,res)=>{
 //for tiger auth
 router.get('/redirect', (req,res) =>{
     const reqbody = {
-    url:'http://192.168.43.124:3000/loginUsers/storybook.com/trusted',
+    url:`http://192.168.43.124:3000/loginUsers/${domainName}/trusted`,
     headers :{
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9vay5jb20iLCJjYWxsYmFja1VybCI6ImxvY2FsaG9zdDo1MDAwL2Rhc2hib2FyZCIsImZhY2UiOnRydWUsIm90cCI6dHJ1ZSwidm9pY2UiOnRydWUsInBlcm1pc3Npb25zIjp7Im5hbWUiOmZhbHNlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjpmYWxzZSwiYXVkaW8iOmZhbHNlfX0sImlhdCI6MTU1MTI2NDE5M30.Tu-lHJUs7k7hIj--QvUviNVgboBoYYnqePB-vzFKFBk',
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9va3MuY29tIiwiY2FsbGJhY2tVcmwiOiIxOTIuMTY4LjQzLjgxOjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6ZmFsc2UsInVzZXJuYW1lIjp0cnVlLCJwaG9uZSI6dHJ1ZSwiZG9iIjp0cnVlLCJpbWciOnRydWUsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTEzMjIyOTR9.CUNHvx8pRvu_dYbeMYO0IynrQSz9u4wCG0vTbrzSE7w',
         'Content-Type':'application/json'
     }
 };
