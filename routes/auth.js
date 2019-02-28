@@ -23,7 +23,7 @@ router.get('/verify',(req,res) => {
 });
 
 router.get('/logout',(req,res) => {
-    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('sessUser');
     req.logout();
     res.redirect('/');
     

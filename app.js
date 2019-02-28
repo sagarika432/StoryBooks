@@ -105,19 +105,12 @@ const Mapping = mongoose.model('Mapping');
 //Set Global vars
 app.use(async (req,res,next) => {
     // console.log(req.user);
-    if (sessionstorage.getItem('username')) {
-        console.log(' username here : ' + sessionstorage.getItem('username'));
-        const dbResponse = await Mapping.findOne({  tigerAuthUser : sessionstorage.getItem('username') });
-        console.log(dbResponse);
-        if(dbResponse) {
-            req.user = dbResponse.storybooksUser[0];
-            console.log ('////////////////////////////');
-            console.log(req.user._id)
-            console.log(typeof req.user._id)
-            console.log('user deta');
-            console.log(req.user)
-
-        }
+    if (sessionstorage.getItem('sessUser')) {
+        console.log(' username here : ' + sessionstorage.getItem('sessUser'));
+        req.user= sessionstorage.getItem('sessUser');
+        console.log ('////////////////////////////');
+        console.log('user deta');
+        console.log(req.user)
 
     }
     res.locals.user = req.user || null;

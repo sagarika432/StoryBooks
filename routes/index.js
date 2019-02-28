@@ -47,7 +47,7 @@ router.get('/about',async(req,res ) =>{
 
 
 //for tiger auth
-router.get('/dashboard/:id',(req,res)=>{
+router.get('/dashboard/:id',async(req,res)=>{
      console.log(req.params.id);
      const bodyToSend =JSON.stringify( {
         id: req.params.id,
@@ -57,12 +57,26 @@ router.get('/dashboard/:id',(req,res)=>{
     unirest.post('http://192.168.43.124:3000/login/resource').header({
         'Content-Type':'application/json',
         'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY'
-     }).send(bodyToSend).end((response) =>{
+     }).send(bodyToSend).end(async (response) =>{
          
          console.log('--' + JSON.stringify(response.body.response));
+        
+         const findUser = await User.findOne({ tigerAuthUsername: response.body.response.username });
+         console.log(findUser)
+         if(!findUser){
+            const arr = response.body.response.name.split(' ');
+            const newUser = new User ({
+                firstName: arr[0],
+                lastName: arr[1],
+                tigerAuthUsername: response.body.response.username,
+                image: `localhost:3000/${response.body.response.username}/face_${response.body.response.username}.png`
+            });
+             await newUser.save();
+         }
+         const sessUser = await User.findOne({ tigerAuthUsername: response.body.response.username })
          //res.locals.tigerUser = response.username
-         sessionstorage.setItem('username', response.body.response.username);
-        console.log( ' username of tiger' + sessionstorage.getItem('username'))
+         sessionstorage.setItem('sessUser', sessUser);
+        console.log( ' username of tiger' + sessionstorage.getItem('sessUser'))
          //sess = req.session;
          //sess.username = response.username;
          //console.log(sess.username)
