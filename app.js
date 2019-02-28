@@ -9,6 +9,9 @@ const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
 const morgan = require('morgan')
+var sessionstorage = require('sessionstorage')
+
+
 
 //load Models
 require('./models/User');
@@ -98,11 +101,22 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+const Mapping = mongoose.model('Mapping');
 //Set Global vars
-app.use((req,res,next) => {
+app.use(async (req,res,next) => {
     // console.log(req.user);
+    if (sessionstorage.getItem('username')) {
+        console.log(' username here : ' + sessionstorage.getItem('username'));
+        const dbResponse = await Mapping.findOne({  tigerAuthUser : sessionstorage.getItem('username') });
+        console.log(dbResponse);
+        if(dbResponse) {
+            req.user = dbResponse.storybooksUser
+            console.log(req.user)
+        }
+
+    }
     res.locals.user = req.user || null;
+    console.log(' oauth: ' + req.user)
     // if(res.response ) res.locals.tigerUser = res.response.username || null ;
     // console.log('res.locals.users ' +res.locals.user);
     // if(res.response) console.log('res.locals.tigerUser' + res.response.username)

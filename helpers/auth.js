@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Mapping = require('../models/Mapping')
+
 module.exports = {
     ensureAuthenticated: function(req,res,next){
         if(req.isAuthenticated()){

@@ -8,7 +8,7 @@ const unirest = require('unirest');
 const storage = require('node-sessionstorage')
 var sessionstorage = require('sessionstorage')
 const domainName = require('../domainName')
-
+const Mapping = mongoose.model('Mapping')
 const {ensureAuthenticated , ensureGuest } = require('../helpers/auth');
 
 var sess ;
@@ -31,7 +31,22 @@ router.get('/dashboard',ensureAuthenticated, (req,res ) =>{
     });
     
 });
-router.get('/about',(req,res ) =>{
+router.get('/about',async(req,res ) =>{
+
+    // const newMapping = Mapping({
+    //     tigerAuthUser: 'siddharthp538',
+    //     storybooksUser: {
+    //         "_id": mongoose.Types.ObjectId ("5b9f799e47bea30014836a2d"),
+    //         "googleID": "103656249593689369818",
+    //         "firstName": "Siddharth",
+    //         "lastName": "Pandey",
+    //         "email": "svpandey86@gmail.com",
+    //         "image": "https://lh5.googleusercontent.com/-yjPjj2IkTgc/AAAAAAAAAAI/AAAAAAAAAAA/APUIFaMBDVwRNuQme5B32YGf0dshm904gA/mo/photo.jpg",
+    //         "__v": 0
+        
+    //     }
+    // });
+    // await newMapping.save();
     console.log( ' username of tigerrrrrrrrrrrrrrr' + sessionstorage.getItem('username'))
     res.render('index/about');
 });
