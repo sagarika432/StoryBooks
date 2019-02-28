@@ -11,19 +11,6 @@ var sessionstorage = require('sessionstorage')
 const {ensureAuthenticated , ensureGuest } = require('../helpers/auth');
 
 var sess ;
-<<<<<<< HEAD
-
-
-var sessionChecker = (req, res, next) => {
-    if (req.session.user && req.cookies.user_sid) {
-        res.redirect('/dashboard');
-    } else {
-        next();
-    }    
-};
-
-=======
->>>>>>> 90984bae5d3134533447cf1dc45546a887f48274
 
 router.get('/',ensureGuest,(req,res ) =>{
     res.render('index/welcome');
@@ -61,7 +48,6 @@ router.get('/dashboard/:id',(req,res)=>{
         'Content-Type':'application/json',
         'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9vay5jb20iLCJjYWxsYmFja1VybCI6ImxvY2FsaG9zdDo1MDAwL2Rhc2hib2FyZCIsImZhY2UiOnRydWUsIm90cCI6dHJ1ZSwidm9pY2UiOnRydWUsInBlcm1pc3Npb25zIjp7Im5hbWUiOmZhbHNlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjpmYWxzZSwiYXVkaW8iOmZhbHNlfX0sImlhdCI6MTU1MTI2NDE5M30.Tu-lHJUs7k7hIj--QvUviNVgboBoYYnqePB-vzFKFBk'
      }).send(bodyToSend).end((response) =>{
-<<<<<<< HEAD
          
          console.log('--' + JSON.stringify(response.body.response));
          //res.locals.tigerUser = response.username
@@ -72,14 +58,6 @@ router.get('/dashboard/:id',(req,res)=>{
          //console.log(sess.username)
         //  req.session.user = response.response.username
         //         res.redirect('/dashboard');
-=======
-         console.log(response);
-         sess = req.session;
-         sess.username = response.username;
-         console.log(sess.username)
-        //  res.locals.tigerUser = response.username
-        // sessionStorage.setItem(response.username, response);
->>>>>>> 90984bae5d3134533447cf1dc45546a887f48274
 
      })
      res.send('u');
