@@ -56,7 +56,7 @@ router.get('/dashboard/:id',(req,res)=>{
      console.log(bodyToSend);
     unirest.post('http://192.168.43.124:3000/login/resource').header({
         'Content-Type':'application/json',
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9va3MuY29tIiwiY2FsbGJhY2tVcmwiOiIxOTIuMTY4LjQzLjgxOjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6ZmFsc2UsInVzZXJuYW1lIjp0cnVlLCJwaG9uZSI6dHJ1ZSwiZG9iIjp0cnVlLCJpbWciOnRydWUsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTEzMjIyOTR9.CUNHvx8pRvu_dYbeMYO0IynrQSz9u4wCG0vTbrzSE7w'
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY'
      }).send(bodyToSend).end((response) =>{
          
          console.log('--' + JSON.stringify(response.body.response));
@@ -86,7 +86,7 @@ router.get('/redirect', (req,res) =>{
     const reqbody = {
     url:`http://192.168.43.124:3000/loginUsers/${domainName}/trusted`,
     headers :{
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9va3MuY29tIiwiY2FsbGJhY2tVcmwiOiIxOTIuMTY4LjQzLjgxOjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6ZmFsc2UsInVzZXJuYW1lIjp0cnVlLCJwaG9uZSI6dHJ1ZSwiZG9iIjp0cnVlLCJpbWciOnRydWUsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTEzMjIyOTR9.CUNHvx8pRvu_dYbeMYO0IynrQSz9u4wCG0vTbrzSE7w',
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY',
         'Content-Type':'application/json'
     }
 };

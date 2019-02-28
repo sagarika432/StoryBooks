@@ -1,2 +1,2 @@
-const domainName = 'storybooks.com';
+const domainName = 'SB.com';
 module.exports = domainName;
