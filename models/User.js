@@ -20,7 +20,15 @@ const UserSchema  = new Schema({
     image: {
         type:String
     }
+///
+/*
+    storybook_username
+    username: 'siddharthp538',
+    img: ''.
+    audio: ''
 
+*/
+//
 
 });
 

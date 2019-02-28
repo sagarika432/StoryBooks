@@ -110,8 +110,13 @@ app.use(async (req,res,next) => {
         const dbResponse = await Mapping.findOne({  tigerAuthUser : sessionstorage.getItem('username') });
         console.log(dbResponse);
         if(dbResponse) {
-            req.user = dbResponse.storybooksUser
+            req.user = dbResponse.storybooksUser[0];
+            console.log ('////////////////////////////');
+            console.log(req.user._id)
+            console.log(typeof req.user._id)
+            console.log('user deta');
             console.log(req.user)
+
         }
 
     }

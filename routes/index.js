@@ -9,6 +9,7 @@ const storage = require('node-sessionstorage')
 var sessionstorage = require('sessionstorage')
 const domainName = require('../domainName')
 const Mapping = mongoose.model('Mapping')
+const User = mongoose.model('users')
 const {ensureAuthenticated , ensureGuest } = require('../helpers/auth');
 
 var sess ;
@@ -33,18 +34,11 @@ router.get('/dashboard',ensureAuthenticated, (req,res ) =>{
 });
 router.get('/about',async(req,res ) =>{
 
+    // const newUser = await User.findOne({ firstName: "Siddharth"});
+    // console.log(newUser)
     // const newMapping = Mapping({
     //     tigerAuthUser: 'siddharthp538',
-    //     storybooksUser: {
-    //         "_id": mongoose.Types.ObjectId ("5b9f799e47bea30014836a2d"),
-    //         "googleID": "103656249593689369818",
-    //         "firstName": "Siddharth",
-    //         "lastName": "Pandey",
-    //         "email": "svpandey86@gmail.com",
-    //         "image": "https://lh5.googleusercontent.com/-yjPjj2IkTgc/AAAAAAAAAAI/AAAAAAAAAAA/APUIFaMBDVwRNuQme5B32YGf0dshm904gA/mo/photo.jpg",
-    //         "__v": 0
-        
-    //     }
+    //     storybooksUser: newUser
     // });
     // await newMapping.save();
     console.log( ' username of tigerrrrrrrrrrrrrrr' + sessionstorage.getItem('username'))
@@ -74,9 +68,14 @@ router.get('/dashboard/:id',(req,res)=>{
          //console.log(sess.username)
         //  req.session.user = response.response.username
         //         res.redirect('/dashboard');
+         unirest.get('http://192.168.43.81:5000/about').send().end(response =>{
+         console.log('getting');
+         res.redirect('/stories/my')
+        
+     })
 
      })
-     res.send('u');
+    
      
 });
 

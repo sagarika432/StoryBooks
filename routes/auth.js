@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-
+const sessionStorage = require('sessionstorage');
 
 router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email']
@@ -23,6 +23,7 @@ router.get('/verify',(req,res) => {
 });
 
 router.get('/logout',(req,res) => {
+    sessionStorage.removeItem('username');
     req.logout();
     res.redirect('/');
     

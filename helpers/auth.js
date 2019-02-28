@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Mapping = require('../models/Mapping')
-
+const sessionstorage  = require('sessionstorage')
 module.exports = {
     ensureAuthenticated: function(req,res,next){
-        if(req.isAuthenticated()){
+        if( sessionstorage.getItem('username') || req.isAuthenticated() ){
             return next();
         }
         
