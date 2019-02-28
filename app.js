@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
+const morgan = require('morgan')
 
 //load Models
 require('./models/User');
@@ -50,9 +51,10 @@ mongoose.connect(keys.mongoURI ,{
 
 const app = express();
 
-
+//morgan middleware
+app.use(morgan('dev'))
 //body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors({credentials:true}));
 
@@ -82,7 +84,11 @@ app.use(cookieParser());
 app.use(session({
     secret : 'secret',
     resave:false,
-    saveUninitialized:false
+    saveUninitialized:false,
+    key: 'user_sid',
+    cookie: {
+        expires: 60000
+    }
 
 }));
 
@@ -100,6 +106,9 @@ app.use((req,res,next) => {
     // if(res.response ) res.locals.tigerUser = res.response.username || null ;
     // console.log('res.locals.users ' +res.locals.user);
     // if(res.response) console.log('res.locals.tigerUser' + res.response.username)
+    // if (req.cookies.user_sid && !req.session.user) {
+    //     res.clearCookie('user_sid');        
+    // }
     next();
 
 });

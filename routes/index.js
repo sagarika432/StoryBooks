@@ -5,8 +5,21 @@ const Story = mongoose.model('stories');
 const request = require('request');
 const Cookies = require('universal-cookie');
 const unirest = require('unirest');
+const storage = require('node-sessionstorage')
+var sessionstorage = require('sessionstorage')
+
 const {ensureAuthenticated , ensureGuest } = require('../helpers/auth');
 
+var sess ;
+
+
+var sessionChecker = (req, res, next) => {
+    if (req.session.user && req.cookies.user_sid) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }    
+};
 
 
 router.get('/',ensureGuest,(req,res ) =>{
@@ -24,6 +37,7 @@ router.get('/dashboard',ensureAuthenticated, (req,res ) =>{
     
 });
 router.get('/about',(req,res ) =>{
+    console.log( ' username of tigerrrrrrrrrrrrrrr' + sessionstorage.getItem('username'))
     res.render('index/about');
 });
 
@@ -40,12 +54,19 @@ router.get('/dashboard/:id',(req,res)=>{
         'Content-Type':'application/json',
         'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6InN0b3J5Ym9vay5jb20iLCJjYWxsYmFja1VybCI6ImxvY2FsaG9zdDo1MDAwL2Rhc2hib2FyZCIsImZhY2UiOnRydWUsIm90cCI6dHJ1ZSwidm9pY2UiOnRydWUsInBlcm1pc3Npb25zIjp7Im5hbWUiOmZhbHNlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjpmYWxzZSwiYXVkaW8iOmZhbHNlfX0sImlhdCI6MTU1MTI2NDE5M30.Tu-lHJUs7k7hIj--QvUviNVgboBoYYnqePB-vzFKFBk'
      }).send(bodyToSend).end((response) =>{
-         console.log(response);
-        //  res.locals.tigerUser = response.username
-        // sessionStorage.setItem(response.username, response);
+         
+         console.log('--' + JSON.stringify(response.body.response));
+         //res.locals.tigerUser = response.username
+         sessionstorage.setItem('username', response.body.response.username);
+        console.log( ' username of tiger' + sessionstorage.getItem('username'))
+         //sess = req.session;
+         //sess.username = response.username;
+         //console.log(sess.username)
+        //  req.session.user = response.response.username
+        //         res.redirect('/dashboard');
 
      })
-     //res.send('u');
+     res.send('u');
      
 });
 
