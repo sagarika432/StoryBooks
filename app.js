@@ -10,8 +10,14 @@ const passport = require('passport');
 const cors = require('cors');
 const morgan = require('morgan')
 var sessionstorage = require('sessionstorage')
+const fs = require('fs')
 
+const https = require('https');
 
+let options = {
+  key : fs.readFileSync('./server.key'),
+  cert : fs.readFileSync('./server.crt')
+}
 
 //load Models
 require('./models/User');
@@ -29,6 +35,7 @@ const stories = require('./routes/stories');
 
 //load Keys 
 const keys  = require('./config/keys');
+
 
 //handlebars helpers
 const {
@@ -137,6 +144,6 @@ app.use('/stories',stories);
 const port = process.env.PORT || 5000;
 
 
-app.listen(port,()=>{
-    console.log(`Server started  on port  ${port}`)
-});
+https.createServer(options, app).listen(5000, ()=>{
+    console.log('Server running on 3000....');
+  });

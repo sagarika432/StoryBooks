@@ -11,7 +11,8 @@ const domainName = require('../domainName')
 const Mapping = mongoose.model('Mapping')
 const User = mongoose.model('users')
 const {ensureAuthenticated , ensureGuest } = require('../helpers/auth');
-
+const myip = require('../myip')
+const https = require('https')
 var sess ;
 
 router.get('/',ensureGuest,(req,res ) =>{
@@ -54,10 +55,10 @@ router.get('/dashboard/:id',async(req,res)=>{
         domainName
      });
      console.log(bodyToSend);
-    unirest.post('http://192.168.43.124:3000/login/resource').header({
+    unirest.post(`https://${myip}:3000/login/resource`).header({
         'Content-Type':'application/json',
         'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY'
-     }).send(bodyToSend).end(async (response) =>{
+     }).send(bodyToSend).strictSSL(false).end(async (response) =>{
          
          console.log('--' + JSON.stringify(response.body.response));
         
@@ -69,7 +70,7 @@ router.get('/dashboard/:id',async(req,res)=>{
                 firstName: arr[0],
                 lastName: arr[1],
                 tigerAuthUsername: response.body.response.username,
-                image: `localhost:3000/${response.body.response.username}/face_${response.body.response.username}.png`
+                image: `https://localhost:3000/${response.body.response.username}/face_${response.body.response.username}.png`
             });
              await newUser.save();
          }
@@ -82,7 +83,7 @@ router.get('/dashboard/:id',async(req,res)=>{
          //console.log(sess.username)
         //  req.session.user = response.response.username
         //         res.redirect('/dashboard');
-         unirest.get('http://192.168.43.81:5000/about').send().end(response =>{
+         unirest.get(`https://${myip}:5000/about`).send().end(response =>{
          console.log('getting');
          res.redirect('/stories/my')
         
@@ -98,18 +99,33 @@ router.get('/dashboard/:id',async(req,res)=>{
 //for tiger auth
 router.get('/redirect', (req,res) =>{
     const reqbody = {
-    url:`http://192.168.43.124:3000/loginUsers/${domainName}/trusted`,
+    url:`https://${myip}:3000/loginUsers/${domainName}/trusted`,
     headers :{
         'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY',
         'Content-Type':'application/json'
     }
 };
-    console.log('sending req to server');
-    request.get(reqbody,(error, response, body) =>{
-            console.log(body);
-            const obj = JSON.parse(body);
-            res.redirect(obj.link);
-    });
+console.log(reqbody)
+// res.redirect('https://172.30.8.120:4200/transition/SB.com/5c7967748d871821b7d4c223/trusted')
+    // console.log('sending req to server');
+    // request.get(reqbody,(error, response, body) =>{
+    //         console.log(body);
+    //         const obj = JSON.parse(body);
+    //         res.redirect(obj.link);
+    // });
+
+
+    unirest.get(`https://${myip}:3000/loginUsers/${domainName}/trusted`).header({
+        'Content-Type':'application/json',
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY'
+     }).strictSSL(false).end((response)=> {
+        console.log('here' + response.body.link);
+         const link = response.body.link;
+         console.log(' here ./d.f/. ' + link)
+         res.redirect(link)
+
+     }) 
+
 
 });
 
