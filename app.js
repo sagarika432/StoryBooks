@@ -9,7 +9,7 @@ const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
 const morgan = require('morgan')
-var sessionstorage = require('sessionstorage')
+const sessionstorage = require('sessionstorage')
 const fs = require('fs')
 
 const https = require('https');
@@ -145,5 +145,5 @@ const port = process.env.PORT || 5000;
 
 
 https.createServer(options, app).listen(5000, ()=>{
-    console.log('Server running on 3000....');
+    console.log('Server running on 5000....');
   });

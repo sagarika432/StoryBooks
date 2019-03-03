@@ -3,7 +3,7 @@ const Mapping = require('../models/Mapping')
 const sessionstorage  = require('sessionstorage')
 module.exports = {
     ensureAuthenticated: function(req,res,next){
-        if( sessionstorage.getItem('username') || req.isAuthenticated() ){
+        if( sessionstorage.getItem('sessUser') || req.isAuthenticated() ){
             return next();
         }
         

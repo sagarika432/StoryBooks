@@ -50,16 +50,18 @@ router.get('/about',async(req,res ) =>{
 //for tiger auth
 router.get('/dashboard/:id',async(req,res)=>{
      console.log(req.params.id);
-     const bodyToSend =JSON.stringify( {
+     console.log(domainName)
+     const bodyToSend = {
         id: req.params.id,
         domainName
-     });
+     };
+     
      console.log(bodyToSend);
-    unirest.post(`https://${myip}:3000/login/resource`).header({
+    await unirest.post(`https://${myip}:3000/login/resource`).header({
         'Content-Type':'application/json',
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY'
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTcyLjMwLjcuMjI5OjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6dHJ1ZSwidXNlcm5hbWUiOnRydWUsInBob25lIjp0cnVlLCJkb2IiOnRydWUsImltZyI6ZmFsc2UsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTE1ODQ4ODZ9.e14EZ9sIOCVuYl38sDijg0bdf7VVPg_nEjacA_Q_jdw'
      }).send(bodyToSend).strictSSL(false).end(async (response) =>{
-         
+         console.log(JSON.stringify(response.body))
          console.log('--' + JSON.stringify(response.body.response));
         
          const findUser = await User.findOne({ tigerAuthUsername: response.body.response.username });
@@ -76,14 +78,14 @@ router.get('/dashboard/:id',async(req,res)=>{
          }
          const sessUser = await User.findOne({ tigerAuthUsername: response.body.response.username })
          //res.locals.tigerUser = response.username
-         sessionstorage.setItem('sessUser', sessUser);
+         await sessionstorage.setItem('sessUser', sessUser);
         console.log( ' username of tiger' + sessionstorage.getItem('sessUser'))
          //sess = req.session;
          //sess.username = response.username;
          //console.log(sess.username)
         //  req.session.user = response.response.username
         //         res.redirect('/dashboard');
-         unirest.get(`https://${myip}:5000/about`).send().end(response =>{
+         await unirest.get(`https://${myip}:5000/about`).send().end(response =>{
          console.log('getting');
          res.redirect('/stories/my')
         
@@ -101,7 +103,7 @@ router.get('/redirect', (req,res) =>{
     const reqbody = {
     url:`https://${myip}:3000/loginUsers/${domainName}/trusted`,
     headers :{
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY',
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTcyLjMwLjcuMjI5OjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6dHJ1ZSwidXNlcm5hbWUiOnRydWUsInBob25lIjp0cnVlLCJkb2IiOnRydWUsImltZyI6ZmFsc2UsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTE1ODQ4ODZ9.e14EZ9sIOCVuYl38sDijg0bdf7VVPg_nEjacA_Q_jdw',
         'Content-Type':'application/json'
     }
 };
@@ -117,7 +119,7 @@ console.log(reqbody)
 
     unirest.get(`https://${myip}:3000/loginUsers/${domainName}/trusted`).header({
         'Content-Type':'application/json',
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTkyLjE2OC40My4xMjQ6NTAwMC9kYXNoYm9hcmQiLCJmYWNlIjp0cnVlLCJvdHAiOnRydWUsInZvaWNlIjp0cnVlLCJwZXJtaXNzaW9ucyI6eyJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGhvbmUiOnRydWUsImRvYiI6dHJ1ZSwiaW1nIjp0cnVlLCJhdWRpbyI6ZmFsc2V9fSwiaWF0IjoxNTUxMzc2ODYwfQ.3Ts8SAq8Vw0ETUP1t2ZPmsBQw-81F3TFxABLLhKgHZY'
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiZG9tYWluTmFtZSI6IlNCLmNvbSIsImNhbGxiYWNrVXJsIjoiMTcyLjMwLjcuMjI5OjUwMDAvZGFzaGJvYXJkIiwiZmFjZSI6dHJ1ZSwib3RwIjp0cnVlLCJ2b2ljZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsibmFtZSI6dHJ1ZSwidXNlcm5hbWUiOnRydWUsInBob25lIjp0cnVlLCJkb2IiOnRydWUsImltZyI6ZmFsc2UsImF1ZGlvIjpmYWxzZX19LCJpYXQiOjE1NTE1ODQ4ODZ9.e14EZ9sIOCVuYl38sDijg0bdf7VVPg_nEjacA_Q_jdw'
      }).strictSSL(false).end((response)=> {
         console.log('here' + response.body.link);
          const link = response.body.link;
